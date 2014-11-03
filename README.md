@@ -2,7 +2,7 @@ Midmean
 ===
 [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Coverage Status][coveralls-image]][coveralls-url] [![Dependencies][dependencies-image]][dependencies-url]
 
-> Computes the [interquartile mean](http://en.wikipedia.org/wiki/Interquartile_mean) (midmean) of a numeric array.
+> Computes the [interquartile mean](http://www.jstor.org/stable/1268431) (midmean) of a numeric array.
 
 
 ## Installation
