@@ -29,7 +29,7 @@ Computes the interquartile mean provided an input `array`.
 ``` javascript
 var unsorted = [ 5, 6, 7, 2, 1, 8, 4, 3 ];
 
-var r = iqm( unsorted );
+var iqmean = iqm( unsorted );
 // returns 4.5
 ```
 
@@ -38,7 +38,7 @@ If the input `array` is already `sorted` in __ascending__ order, set the optiona
 ``` javascript
 var sorted = [ 1, 2, 3, 4, 5, 6, 7, 8 ];
 
-var r = iqm( sorted, true );
+var iqmean = iqm( sorted, true );
 // returns 4.5
 ```
 
