@@ -1,6 +1,6 @@
 {
   "name": "compute-midmean",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Computes the interquartile mean (midmean) of a numeric array.",
   "author": {
     "name": "Rebekah Smith",
