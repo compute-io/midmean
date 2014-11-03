@@ -2,7 +2,7 @@ iqm
 ===
 [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Coverage Status][coveralls-image]][coveralls-url] [![Dependencies][dependencies-image]][dependencies-url]
 
-> Computes the interquartile mean for an array of numerical values.
+> Computes the [interquartile mean](http://en.wikipedia.org/wiki/Interquartile_mean) (midmean) for an array of numerical values.
 
 
 ## Installation
@@ -19,14 +19,40 @@ For use in the browser, use [browserify](https://github.com/substack/node-browse
 To use the module,
 
 ``` javascript
-var lib = require( 'compute-iqm' );
+var iqm = require( 'compute-iqm' );
+```
+
+#### iqm( arr[, sorted] )
+
+Computes the interquartile mean provided an input `array`.
+
+``` javascript
+var unsorted = [ 5, 6, 7, 2, 1, 8, 4, 3 ];
+
+var r = iqm( unsorted );
+// returns 4.5
+```
+
+If the input `array` is already `sorted` in __ascending__ order, set the optional second argument to `true`.
+
+``` javascript
+var sorted = [ 1, 2, 3, 4, 5, 6, 7, 8 ];
+
+var r = iqm( sorted, true );
+// returns 4.5
 ```
 
 
 ## Examples
 
 ``` javascript
-var lib = require( 'compute-iqm' );
+var data = new Array( 100 );
+
+for ( var i = 0; i < data.length; i++ ) {
+    data[ i ] = Math.round( Math.random()*100 );
+}
+
+console.log( iqm( data ) );
 ```
 
 To run the example code from the top-level application directory,

@@ -11,6 +11,10 @@
       "name": "Rebekah Smith",
       "email": "rebekahjs17@gmail.com"
     }
+    {
+      "name": "Athan Reines",
+      "email": "kgryte@gmail.com"
+    }
   ],
   "scripts": {
     "test": "./node_modules/.bin/mocha",
@@ -25,7 +29,14 @@
   "keywords": [
     "compute.io",
     "compute",
-    "computation"
+    "computation",
+    "interquartile",
+    "mean",
+    "iqm",
+    "central",
+    "tendency",
+    "statistics",
+    "midmean"
   ],
   "bugs": {
     "url": "https://github.com/compute-io/iqm/issues"
