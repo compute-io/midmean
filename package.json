@@ -1,7 +1,7 @@
 {
-  "name": "compute-iqm",
+  "name": "compute-midmean",
   "version": "0.0.0",
-  "description": "Computes the interquartile mean for an array of numerical values.",
+  "description": "Computes the interquartile mean (midmean) of a numeric array.",
   "author": {
     "name": "Rebekah Smith",
     "email": "rebekahjs17@gmail.com"
@@ -24,7 +24,7 @@
   "main": "./lib",
   "repository": {
     "type": "git",
-    "url": "git://github.com/compute-io/iqm.git"
+    "url": "git://github.com/compute-io/midmean.git"
   },
   "keywords": [
     "compute.io",
@@ -36,10 +36,15 @@
     "central",
     "tendency",
     "statistics",
+    "stats",
+    "mathematics",
+    "math",
+    "quartile",
+    "quantile",
     "midmean"
   ],
   "bugs": {
-    "url": "https://github.com/compute-io/iqm/issues"
+    "url": "https://github.com/compute-io/midmean/issues"
   },
   "dependencies": {},
   "devDependencies": {

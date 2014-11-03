@@ -1,3 +1,4 @@
+'use strict';
 
 // MODULES //
 
@@ -5,7 +6,7 @@ var // Expectation library:
 	chai = require( 'chai' ),
 
 	// Module to be tested:
-	iqm = require( './../lib' );
+	midmean = require( './../lib' );
 
 
 // VARIABLES //
@@ -16,23 +17,22 @@ var expect = chai.expect,
 
 // TESTS //
 
-describe( 'compute-iqm', function tests() {
-	'use strict';
+describe( 'compute-midmean', function tests() {
 
 	it( 'should export a function', function test() {
-		expect( iqm ).to.be.a( 'function' );
+		expect( midmean ).to.be.a( 'function' );
 	});
 
 	it( 'should throw an error if provided a non-array', function test() {
 		var values = [
-					'5',
-					5,
-					true,
-					undefined,
-					null,
-					NaN,
-					function(){},
-					{}
+			'5',
+			5,
+			true,
+			undefined,
+			null,
+			NaN,
+			function(){},
+			{}
 		];
 
 		for ( var i = 0; i < values.length; i++ ) {
@@ -41,21 +41,21 @@ describe( 'compute-iqm', function tests() {
 
 		function badValue( value ) {
 			return function() {
-				iqm( value, true );
+				midmean( value, true );
 			};
 		}
 	});
 
 	it( 'should throw an error if provided a non-boolean for the second argument', function test() {
 		var values = [
-					'5',
-					5,
-					[],
-					undefined,
-					null,
-					NaN,
-					function(){},
-					{}
+			'5',
+			5,
+			[],
+			undefined,
+			null,
+			NaN,
+			function(){},
+			{}
 		];
 
 		for ( var i = 0; i < values.length; i++ ) {
@@ -64,33 +64,27 @@ describe( 'compute-iqm', function tests() {
 
 		function badValue( value ) {
 			return function() {
-				iqm( [], value );
+				midmean( [], value );
 			};
 		}
 	});
 
-	it( 'should compute the interquartile mean', function test() {
+	it( 'should compute the interquartile mean (midmean)', function test() {
 		var data, expected;
 
-		// Array divides by 4
-		data = [ 5, 8, 4, 38, 8, 6, 9, 7, 7, 3, 1, 6 ];
-		expected = 6.5;
+		data = [ 5, 8, 4, 38, 8, 6, 9, 7, 7, 3, 1, 6, 7 ];
+		expected = 46/7;
 
-		// unsorted test
-		assert.strictEqual( iqm( data ), expected );
+		// Unsorted test:
+		assert.closeTo( midmean( data ), expected, 1e-10 );
 
 		// Sort the data:
 		data.sort( function sort( a, b ) {
 			return a - b;
 		});
 
-		// sorted test
-		assert.strictEqual( iqm( data, true ), expected );
-
-		// Array does not divide by 4
-		data = [ 17, 3, 5, 13, 11, 9, 7, 15, 1 ];
-		expected = 9;
-		assert.strictEqual( iqm( data ), expected );
+		// Sorted test:
+		assert.closeTo( midmean( data, true ), expected, 1e-10 );
 	});
 
 });
