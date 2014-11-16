@@ -69,7 +69,7 @@ If provided an unsorted input `array`, the function is `O( N log(N) + m )`, wher
 
 Midmean includes the values located between *but not including* Q1 and Q3. In the following examples, the quartiles are marked in bold, and values included in the midmean in italics.
 
-[1,2**,**_3,4,5,6_**,**7,8]
+[1,2**,**\_3,4,5,6_\**,**7,8]
 Returns 4.5
 
 [1,**2**,_3,4,5_,**6**,7]
