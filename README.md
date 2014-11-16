@@ -67,13 +67,11 @@ If provided an unsorted input `array`, the function is `O( N log(N) + m )`, wher
 
 The midmean includes the values located between *but not including* the first and third quartiles. In the following examples, the values included in the midmean are in bold.
 
-``` javascript
-[1,2,__3,4,5,6__,7,8]  
-// returns 4.5
-```
+[ 1, 2, __3, 4, 5, 6__, 7, 8 ] --> returns 4.5
 
-[1,2,__3,4,5__,6,7]  
-Returns 4
+[ 1, 2, __3, 4, 5__, 6, 7 ] --> returns 4
+
+
 
 ## Tests
 

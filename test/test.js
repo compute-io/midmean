@@ -76,13 +76,13 @@ describe( 'compute-midmean', function tests() {
 			return function() {
 				midmean( array );
 			};
-		}		
+		}
 
 		expect( badValue( data ) ).to.throw( TypeError );
 
 	});
 
-	it( 'should compute the interquartile mean (midmean) for len divisible by 4', function test() {
+	it( 'should compute the interquartile mean (midmean) for an array length divisible by 4', function test() {
 		var data, expected;
 
 		data = [ 3, 7, 1, 34, 8, 9, 3, 5, 7, 45, 6, 2 ];
@@ -100,7 +100,7 @@ describe( 'compute-midmean', function tests() {
 		assert.strictEqual( midmean( data, true ), expected );
 	});
 
-	it( 'should compute the interquartile mean (midmean) for len not divisible by 4', function test() {
+	it( 'should compute the interquartile mean (midmean) for an array length not divisible by 4', function test() {
 		var data, expected;
 
 		data = [ 3, 7, 1, 34, 8, 9, 3, 5, 7, 45, 8 ];
