@@ -61,20 +61,19 @@ To run the example code from the top-level application directory,
 $ node ./examples/index.js
 ```
 
-Midmean includes the values located between *but not including* Q1 and Q3. In the following examples, the quartiles are marked in bold, and values included in the midmean in italics.
-
-``` javascript
-[1,2**,**_3,4,5,6_**,**7,8]
-Returns 4.5
-
-[1,**2**,_3,4,5_,**6**,7]
-Returns 4
-```
+Midmean includes the values located between *but not including* Q1 and Q3. In the following examples, the quartiles are marked in bold, and values included in the midmean in italics. 
 
 ## Notes
 
 If provided an unsorted input `array`, the function is `O( N log(N) + m )`, where `N` is the input `array` length and `m` is the number of values located between the first and third quartiles. If the input `array` is already sorted in __ascending__ order, the function is `O(m)`.
 
+Midmean includes the values located between *but not including* Q1 and Q3. In the following examples, the quartiles are marked in bold, and values included in the midmean in italics.
+
+[1,2**,**_3,4,5,6_**,**7,8]
+Returns 4.5
+
+[1,**2**,_3,4,5_,**6**,7]
+Returns 4
 
 ## Tests
 
