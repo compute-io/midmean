@@ -65,10 +65,12 @@ $ node ./examples/index.js
 
 If provided an unsorted input `array`, the function is `O( N log(N) + m )`, where `N` is the input `array` length and `m` is the number of values located between the first and third quartiles. If the input `array` is already sorted in __ascending__ order, the function is `O(m)`.
 
-Midmean includes the values located between *but not including* Q1 and Q3. In the following examples, the values included in the midmean are in bold.
+The midmean includes the values located between *but not including* the first and third quartiles. In the following examples, the values included in the midmean are in bold.
 
+``` javascript
 [1,2,__3,4,5,6__,7,8]  
-Returns 4.5
+// returns 4.5
+```
 
 [1,2,__3,4,5__,6,7]  
 Returns 4
