@@ -69,14 +69,27 @@ describe( 'compute-midmean', function tests() {
 		}
 	});
 
-	it( 'should compute the interquartile mean (midmean)', function test() {
+	it( 'should throw an error if provided an array of insufficient length', function test() {
+		var data = [2, 5];
+
+		function badValue( array ) {
+			return function() {
+				midmean( array );
+			};
+		}		
+
+		expect( badValue( data ) ).to.throw( TypeError );
+
+	});
+
+	it( 'should compute the interquartile mean (midmean) for len divisible by 4', function test() {
 		var data, expected;
 
-		data = [ 5, 8, 4, 38, 8, 6, 9, 7, 7, 3, 1, 6, 7 ];
-		expected = 46/7;
+		data = [ 3, 7, 1, 34, 8, 9, 3, 5, 7, 45, 6, 2 ];
+		expected = 6;
 
 		// Unsorted test:
-		assert.closeTo( midmean( data ), expected, 1e-10 );
+		assert.strictEqual( midmean( data ), expected );
 
 		// Sort the data:
 		data.sort( function sort( a, b ) {
@@ -84,7 +97,25 @@ describe( 'compute-midmean', function tests() {
 		});
 
 		// Sorted test:
-		assert.closeTo( midmean( data, true ), expected, 1e-10 );
+		assert.strictEqual( midmean( data, true ), expected );
+	});
+
+	it( 'should compute the interquartile mean (midmean) for len not divisible by 4', function test() {
+		var data, expected;
+
+		data = [ 3, 7, 1, 34, 8, 9, 3, 5, 7, 45, 8 ];
+		expected = 7;
+
+		// Unsorted test:
+		assert.strictEqual( midmean( data ), expected );
+
+		// Sort the data:
+		data.sort( function sort( a, b ) {
+			return a - b;
+		});
+
+		// Sorted test:
+		assert.strictEqual( midmean( data, true ), expected );
 	});
 
 });
