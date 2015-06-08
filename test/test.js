@@ -1,9 +1,13 @@
+/* global describe, it, require */
 'use strict';
 
 // MODULES //
 
 var // Expectation library:
 	chai = require( 'chai' ),
+
+	// Matrix data structure:
+	matrix = require( 'dstructs-matrix' ),
 
 	// Module to be tested:
 	midmean = require( './../lib' );
@@ -23,9 +27,9 @@ describe( 'compute-midmean', function tests() {
 		expect( midmean ).to.be.a( 'function' );
 	});
 
-	it( 'should throw an error if provided a non-array', function test() {
+	it( 'should throw an error if the first argument is neither array-like or matrix-like', function test() {
 		var values = [
-			'5',
+			// '5', // valid as is array-like (length)
 			5,
 			true,
 			undefined,
@@ -38,84 +42,146 @@ describe( 'compute-midmean', function tests() {
 		for ( var i = 0; i < values.length; i++ ) {
 			expect( badValue( values[i] ) ).to.throw( TypeError );
 		}
-
 		function badValue( value ) {
 			return function() {
-				midmean( value, true );
+				midmean( value );
 			};
 		}
 	});
 
-	it( 'should throw an error if provided a non-boolean for the second argument', function test() {
+	it( 'should throw an error if provided a dimension which is greater than 2 when provided a matrix', function test() {
 		var values = [
 			'5',
 			5,
-			[],
+			true,
 			undefined,
 			null,
 			NaN,
-			function(){},
-			{}
+			[],
+			{},
+			function(){}
 		];
 
 		for ( var i = 0; i < values.length; i++ ) {
-			expect( badValue( values[i] ) ).to.throw( TypeError );
+			expect( badValue( values[i] ) ).to.throw( Error );
 		}
-
 		function badValue( value ) {
 			return function() {
-				midmean( [], value );
+				midmean( matrix( [2,2] ), {
+					'dim': value
+				});
 			};
 		}
 	});
 
-	it( 'should throw an error if provided an array of insufficient length', function test() {
-		var data = [2, 5];
+	it( 'should throw an error if provided an unrecognized/unsupported data type option', function test() {
+		var values = [
+			'beep',
+			'boop'
+		];
 
-		function badValue( array ) {
+		for ( var i = 0; i < values.length; i++ ) {
+			expect( badValue( values[i] ) ).to.throw( Error );
+		}
+		function badValue( value ) {
 			return function() {
-				midmean( array );
+				midmean( matrix( [2,2] ), {
+					'dtype': value
+				});
 			};
 		}
-
-		expect( badValue( data ) ).to.throw( TypeError );
-
 	});
 
-	it( 'should compute the interquartile mean (midmean) for an array length divisible by 4', function test() {
+	it( 'should compute the midmean', function test() {
 		var data, expected;
 
-		data = [ 3, 7, 1, 34, 8, 9, 3, 5, 7, 45, 6, 2 ];
-		expected = 6;
+		data = [ 2, 4, 5, 3, 8, 2 ];
+		expected = 3.5;
 
-		// Unsorted test:
 		assert.strictEqual( midmean( data ), expected );
-
-		// Sort the data:
-		data.sort( function sort( a, b ) {
-			return a - b;
-		});
-
-		// Sorted test:
-		assert.strictEqual( midmean( data, true ), expected );
 	});
 
-	it( 'should compute the interquartile mean (midmean) for an array length not divisible by 4', function test() {
+	it( 'should compute the midmean of a typed array', function test() {
 		var data, expected;
 
-		data = [ 3, 7, 1, 34, 8, 9, 3, 5, 7, 45, 8 ];
-		expected = 7;
+		data = new Int8Array( [ 2, 4, 5, 3, 8, 2 ] );
+		expected = 3.5;
 
-		// Unsorted test:
 		assert.strictEqual( midmean( data ), expected );
+	});
 
-		// Sort the data:
-		data.sort( function sort( a, b ) {
-			return a - b;
+	it( 'should compute the midmean using an accessor function', function test() {
+		var data, expected, actual;
+
+		data = [
+			{'x':2},
+			{'x':4},
+			{'x':5},
+			{'x':3},
+			{'x':8},
+			{'x':2}
+		];
+
+		expected = 3.5;
+		actual = midmean( data, {
+			'accessor': getValue
 		});
 
-		// Sorted test:
-		assert.strictEqual( midmean( data, true ), expected );
+		assert.strictEqual( actual, expected );
+
+		function getValue( d ) {
+			return d.x;
+		}
+	});
+
+	it( 'should compute the midmean along a matrix dimension', function test() {
+		var expected,
+			data,
+			mat,
+			mu,
+			i;
+
+		data = new Int8Array( 25 );
+		for ( i = 0; i < data.length; i++ ) {
+			data[ i ] = i;
+		}
+		mat = matrix( data, [5,5], 'int8' );
+
+		// Default:
+		mu = midmean( mat );
+		expected = '2;7;12;17;22';
+
+		assert.strictEqual( mu.toString(), expected, 'default' );
+
+		// Along columns:
+		mu = midmean( mat, {
+			'dim': 2
+		});
+		expected = '2;7;12;17;22';
+
+		assert.strictEqual( mu.toString(), expected, 'dim: 2' );
+
+		// Along rows:
+		mu = midmean( mat, {
+			'dim': 1
+		});
+		expected = '10,11,12,13,14';
+
+		assert.strictEqual( mu.toString(), expected, 'dim: 1' );
+	});
+
+	it( 'should compute the midmean of 1d matrices (vectors)', function test() {
+		var data, mat;
+
+		data = [ 2, 4, 5, 3, 8, 2 ];
+
+		// Row vector:
+		mat = matrix( data, [1,6], 'int8' );
+		assert.strictEqual( midmean( mat ), 4 );
+
+		// Column vector:
+		mat = matrix( data, [6,1], 'int8' );
+		assert.strictEqual( midmean( mat ), 4 );
 	});
 
 });
