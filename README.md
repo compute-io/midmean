@@ -21,43 +21,145 @@ For use in the browser, use [browserify](https://github.com/substack/node-browse
 var midmean = require( 'compute-midmean' );
 ```
 
-#### midmean( arr[, sorted] )
+#### midmean( x[, opts] )
 
-Computes the [midmean](http://www.jstor.org/stable/1268431) of a numeric `array`.
+Computes the [midmean](http://www.jstor.org/stable/1268431). `x` may be either an [`array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array), [`typed array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Typed_arrays), or [`matrix`](https://github.com/dstructs/matrix).
 
 ``` javascript
 var unsorted = [ 5, 6, 7, 2, 1, 8, 4, 3 ];
-
 var mean = midmean( unsorted );
 // returns 4.5
 ```
 
-If the input `array` is already `sorted` in __ascending__ order, set the optional second argument to `true`.
+If the input `array` is already `sorted` in __ascending__ order, set the `sorted` option to `true`.
 
 ``` javascript
 var sorted = [ 1, 2, 3, 4, 5, 6, 7, 8 ];
 
-var mean = midmean( sorted, true );
+var mean = midmean( sorted, {
+    'sorted': true
+});
 // returns 4.5
 ```
 
-
-## Examples
+For non-numeric `arrays`, provide an accessor `function` for accessing `array` values.
 
 ``` javascript
-var data = new Array( 100 );
+var data = [
+	{'x':2},
+	{'x':4},
+	{'x':5},
+	{'x':3},
+	{'x':8},
+	{'x':2}
+];
 
-for ( var i = 0; i < data.length; i++ ) {
-    data[ i ] = Math.round( Math.random()*100 );
+function getValue( d, i ) {
+	return d.x;
 }
 
-console.log( midmean( data ) );
+var mu = mean( data, {
+	'accessor': getValue
+});
+// returns 3.5
 ```
 
-To run the example code from the top-level application directory,
+If provided a [`matrix`](https://github.com/dstructs/matrix), the function accepts the following `options`:
 
-``` bash
-$ node ./examples/index.js
+*	__dim__: dimension along which to compute the [midmean](http://www.jstor.org/stable/1268431). Default: `2` (along the columns).
+*	__dtype__: output [`matrix`](https://github.com/dstructs/matrix) data type. Default: `float64`.
+
+By default, the function computes the [midmean](http://www.jstor.org/stable/1268431) along the columns (`dim=2`).
+
+``` javascript
+var matrix = require( 'dstructs-matrix' ),
+	data,
+	mat,
+	mu,
+	i;
+
+data = new Int8Array( 25 );
+for ( i = 0; i < data.length; i++ ) {
+	data[ i ] = i;
+}
+mat = matrix( data, [5,5], 'int8' );
+/*
+	[  0  1  2  3  4
+	   5  6  7  8  9
+	  10 11 12 13 14
+	  15 16 17 18 19
+	  20 21 22 23 24 ]
+*/
+
+mu = midmean( mat );
+/*
+	[  2
+	   7
+	  12
+	  17
+	  22 ]
+*/
+```
+
+To compute the [midmean](http://www.jstor.org/stable/1268431) along the rows, set the `dim` option to `1`.
+
+``` javascript
+mu = mean( mat, {
+	'dim': 1
+});
+/*
+	[ 10, 11, 12, 13, 14 ]
+*/
+```
+
+By default, the output [`matrix`](https://github.com/dstructs/matrix) data type is `float64`. To specify a different output data type, set the `dtype` option.
+
+``` javascript
+mu = midmean( mat, {
+	'dim': 1,
+	'dtype': 'uint8'
+});
+/*
+	[ 10, 11, 12, 13, 14 ]
+*/
+
+var dtype = mu.dtype;
+// returns 'uint8'
+```
+
+If provided a [`matrix`](https://github.com/dstructs/matrix) having either dimension equal to `1`, the function treats the [`matrix`](https://github.com/dstructs/matrix) as a [`typed array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Typed_arrays) and returns a `numeric` value.
+
+``` javascript
+data = [ 2, 4, 5, 3, 8, 2 ];
+
+// Row vector:
+mat = matrix( new Int8Array( data ), [1,6], 'int8' );
+mu = midmean( mat );
+// returns 3.5
+
+// Column vector:
+mat = matrix( new Int8Array( data ), [6,1], 'int8' );
+mu = midmean( mat );
+// returns 3.5
+```
+
+If provided an empty [`array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array), [`typed array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Typed_arrays), or [`matrix`](https://github.com/dstructs/matrix), the function returns `null`.
+
+``` javascript
+mu = midmean( [] );
+// returns null
+
+mu = midmean( new Int8Array( [] ) );
+// returns null
+
+mu = midmean( matrix( [0,0] ) );
+// returns null
+
+mu = midmean( matrix( [0,10] ) );
+// returns null
+
+mu = midmean( matrix( [10,0] ) );
+// returns null
 ```
 
 ## Notes
@@ -69,7 +171,84 @@ The midmean includes the values located between *but not including* the first an
 * 	[1,2,__3,4,5,6__,7,8] -> midmean: 4.5
 *	[1,2,__3,4,5__,6,7] -> midmean: 4
 
+## Examples
 
+``` javascript
+var matrix = require( 'dstructs-matrix' ),
+	midmean = require( 'compute-midmean' );
+
+var data,
+	mat,
+	mu,
+	i;
+
+
+// ----
+// Plain arrays...
+data = new Array( 1000 );
+for ( i = 0; i < data.length; i++ ) {
+	data[ i ] = Math.random() * 100;
+}
+mu = midmean( data );
+console.log( 'Arrays: %d\n', mu );
+
+
+// ----
+// Object arrays (accessors)...
+function getValue( d ) {
+	return d.x;
+}
+for ( i = 0; i < data.length; i++ ) {
+	data[ i ] = {
+		'x': data[ i ]
+	};
+}
+mu = midmean( data, {
+	'accessor': getValue
+});
+console.log( 'Accessors: %d\n', mu );
+
+
+// ----
+// Typed arrays...
+data = new Int32Array( 1000 );
+for ( i = 0; i < data.length; i++ ) {
+	data[ i ] = Math.random() * 100;
+}
+mu = midmean( data );
+console.log( 'Typed arrays: %d\n', mu );
+
+
+// ----
+// Matrices (along rows)...
+mat = matrix( data, [100,10], 'int32' );
+mu = midmean( mat, {
+	'dim': 1
+});
+console.log( 'Matrix (rows): %s\n', mu.toString() );
+
+
+// ----
+// Matrices (along columns)...
+mu = midmean( mat, {
+	'dim': 2
+});
+console.log( 'Matrix (columns): %s\n', mu.toString() );
+
+
+// ----
+// Matrices (custom output data type)...
+mu = midmean( mat, {
+	'dtype': 'uint8'
+});
+console.log( 'Matrix (%s): %s\n', mu.dtype, mu.toString() );
+```
+
+To run the example code from the top-level application directory,
+
+``` bash
+$ node ./examples/index.js
+```
 
 ## Tests
 
