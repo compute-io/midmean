@@ -139,7 +139,8 @@ describe( 'validate', function tests() {
 		err = validate( {}, {
 			'accessor': function getValue(){},
 			'dim': 2,
-			'dtype': 'int32'
+			'dtype': 'int32',
+			'sorted': true
 		});
 
 		assert.isNull( err );

@@ -112,7 +112,6 @@ describe( 'compute-midmean', function tests() {
 
 	it( 'should compute the midmean using an accessor function', function test() {
 		var data, expected, actual;
-
 		data = [
 			{'x':2},
 			{'x':4},
@@ -177,11 +176,11 @@ describe( 'compute-midmean', function tests() {
 
 		// Row vector:
 		mat = matrix( data, [1,6], 'int8' );
-		assert.strictEqual( midmean( mat ), 4 );
+		assert.strictEqual( midmean( mat ), 3.5 );
 
 		// Column vector:
 		mat = matrix( data, [6,1], 'int8' );
-		assert.strictEqual( midmean( mat ), 4 );
+		assert.strictEqual( midmean( mat ), 3.5 );
 	});
 
 });
