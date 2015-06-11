@@ -29,7 +29,13 @@ Computes the [midmean](http://www.jstor.org/stable/1268431). `x` may be either a
 var unsorted = [ 5, 6, 7, 2, 1, 8, 4, 3 ];
 var mean = midmean( unsorted );
 // returns 4.5
+
+unsorted = new Int8Array( unsorted );
+mean = midmean( unsorted );
+// returns 4.5
 ```
+
+Note: the input array must contain 3 or more elements, otherwise the function returns `null`.
 
 If the input `array` is already `sorted` in __ascending__ order, set the `sorted` option to `true`.
 
@@ -58,7 +64,7 @@ function getValue( d, i ) {
 	return d.x;
 }
 
-var mu = mean( data, {
+var mu = midmean( data, {
 	'accessor': getValue
 });
 // returns 3.5
@@ -104,7 +110,7 @@ mu = midmean( mat );
 To compute the [midmean](http://www.jstor.org/stable/1268431) along the rows, set the `dim` option to `1`.
 
 ``` javascript
-mu = mean( mat, {
+mu = midmean( mat, {
 	'dim': 1
 });
 /*
@@ -190,7 +196,6 @@ for ( i = 0; i < data.length; i++ ) {
 	data[ i ] = Math.random() * 100;
 }
 mu = midmean( data );
-console.log( 'Arrays: %d\n', mu );
 
 
 // ----
@@ -206,7 +211,6 @@ for ( i = 0; i < data.length; i++ ) {
 mu = midmean( data, {
 	'accessor': getValue
 });
-console.log( 'Accessors: %d\n', mu );
 
 
 // ----
@@ -216,7 +220,6 @@ for ( i = 0; i < data.length; i++ ) {
 	data[ i ] = Math.random() * 100;
 }
 mu = midmean( data );
-console.log( 'Typed arrays: %d\n', mu );
 
 
 // ----
@@ -225,7 +228,6 @@ mat = matrix( data, [100,10], 'int32' );
 mu = midmean( mat, {
 	'dim': 1
 });
-console.log( 'Matrix (rows): %s\n', mu.toString() );
 
 
 // ----
@@ -233,7 +235,6 @@ console.log( 'Matrix (rows): %s\n', mu.toString() );
 mu = midmean( mat, {
 	'dim': 2
 });
-console.log( 'Matrix (columns): %s\n', mu.toString() );
 
 
 // ----
@@ -241,7 +242,6 @@ console.log( 'Matrix (columns): %s\n', mu.toString() );
 mu = midmean( mat, {
 	'dtype': 'uint8'
 });
-console.log( 'Matrix (%s): %s\n', mu.dtype, mu.toString() );
 ```
 
 To run the example code from the top-level application directory,
